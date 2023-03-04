@@ -1,8 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pigeons/Gif.dart';
+import 'package:pigeons/attachments_operations/recording.dart';
+
+import 'package:pigeons/community.dart';
+import 'package:pigeons/emoji.dart';
 
 import 'package:pigeons/end_drawer.dart';
+import 'package:pigeons/login_page.dart';
 import './my_account.dart';
 import './end_drawer.dart';
 
@@ -17,7 +23,7 @@ class MyApp extends StatelessWidget {
       data: new MediaQueryData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: MyAccount(),
+        home: Community(),
       ),
     );
   }

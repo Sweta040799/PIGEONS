@@ -7,7 +7,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pigeons/emoji.dart';
 import '../lib/my_account.dart';
+import 'package:pigeons/main.dart';
 import 'package:pigeons/main.dart';
 
 void main() {
