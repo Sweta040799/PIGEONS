@@ -49,6 +49,7 @@ class _PollState extends State<Poll> {
               child: Container(
                 padding: EdgeInsets.only(left: 10, right: 10, top: 10),
                 child: TextField(
+                  // ignore: prefer_const_constructors
                   style: TextStyle(
                     fontFamily: 'Arial',
                     fontSize: 19,
@@ -164,7 +165,7 @@ class _PollState extends State<Poll> {
               child: (field > 1)
                   ? TextButton(
                       onPressed: () => print("hi"),
-                      child: Text(
+                      child: const Text(
                         style: TextStyle(
                             fontFamily: 'Arial',
                             color: Colors.brown,

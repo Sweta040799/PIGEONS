@@ -1,23 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:pigeons/explore.dart';
 import './my_account.dart';
+import 'community.dart';
 
 class NavBar extends StatefulWidget {
+  int flag;
+  NavBar({required this.flag});
   // ignore: non_constant_identifier_names
 
   @override
-  State<NavBar> createState() => _NavBarState();
+  State<NavBar> createState() => _NavBarState(flag: flag);
 }
 
 class _NavBarState extends State<NavBar> {
-  int? flag;
+  var pages = [Community(), Explore(), Community(), MyAccount()];
+  int flag;
+  _NavBarState({required this.flag});
   void press_behaviour(int index) {
-    setState(() {
-      flag = index;
-      print(flag);
-    });
+    Offset end = Offset(1.0, 0.0), begin = Offset(1.0, 0.0);
+    if (flag != index) {
+      setState(() {
+        if (index > flag) {
+          begin = Offset(1.0, 0.0);
+          end = Offset.zero;
+        } else if (flag > index) {
+          end = Offset(0, 0);
+          begin = Offset(-1.0, 0);
+        }
 
+        flag = index;
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 150),
+                transitionsBuilder:
+                    ((context, animation, secondaryAnimation, child) {
+                  var curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    pages[index]));
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (context) => pages[index]));
+      });
+    }
     print("pressed");
   }
 

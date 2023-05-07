@@ -45,6 +45,14 @@ class _ChatBarState extends State<ChatBar> {
     });
   }
 
+  File? galleryimage;
+  Future<void> open_gallery() async {
+    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      galleryimage = File(file!.path);
+    });
+  }
+
   Future<void> start_recording() async {
     Directory docDir = await getApplicationDocumentsDirectory();
 
@@ -91,7 +99,7 @@ class _ChatBarState extends State<ChatBar> {
   int label = 0;
   int _change = 0;
   int _end = 1;
-
+  bool expanded = true;
   @override
   Widget build(BuildContext context) {
     print("build() chatBar");
@@ -105,218 +113,233 @@ class _ChatBarState extends State<ChatBar> {
         }
         return true;
       },
-      child: Column(
-        children: [
-          Visibility(
-            visible: attachment,
-            child: ChatAttachment(
-              attachment: open_attachment,
-            ),
-          ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 5, left: 5, bottom: 12),
-              child: Row(
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Material(
-                    borderRadius: BorderRadius.circular(20),
-                    elevation: 3,
-                    child: AnimatedContainer(
-                      onEnd: () {
-                        if (_change == 0)
-                          // ignore: curly_braces_in_flow_control_structures
-                          setState(() {
-                            _end *= -1;
-                          });
-                      },
-                      decoration: BoxDecoration(
-                        // ignore: prefer_const_literals_to_create_immutables
-
-                        color: const Color.fromARGB(154, 236, 208, 208),
-                        border: Border.all(
-                          color: Colors.transparent,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      width: _change == 0
-                          ? MediaQuery.of(context).size.width * 0.7
-                          : MediaQuery.of(context).size.width * 0.9,
-                      constraints: const BoxConstraints(
-                        maxHeight: 100,
-                      ),
-                      // height: 40,
-                      duration: Duration(milliseconds: 100),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: IconButton(
-                                iconSize: 25,
-                                splashRadius: 20,
-                                onPressed: changeEmojiTab,
-                                color: const Color.fromARGB(255, 157, 115, 115),
-                                icon: const Icon(Icons.emoji_emotions_outlined),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                // height: 40,
-                                //  constraints:
-                                // BoxConstraint
-                                // constraints: BoxConstraints(maxHeight: 100),
-                                //width: 200,
-                                // ignore: prefer_const_constructors
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 5,
-                                    //left: 5,
-                                  ),
-                                  // ignore: prefer_const_constructors
-                                  child: TextField(
-                                    onTap: keyboard_dismiss,
-
-                                    controller: controller,
-
-                                    // maxLength: 10,
-                                    maxLines: null,
-                                    onChanged: (value) {
-                                      text = value;
-                                      changeHeight(value);
-                                      if (value.isNotEmpty && _change == 0) {
-                                        setState(
-                                          () {
-                                            _end = -1;
-                                            _change = 1;
-                                          },
-                                        );
-                                      } else if (value.isEmpty) {
-                                        setState(
-                                          () {
-                                            _change = 0;
-                                          },
-                                        );
-                                      }
-                                    },
-                                    // maxLines: null,
-                                    minLines: null,
-                                    //expands: true,
-
-                                    style: const TextStyle(
-                                        fontSize: 20, fontFamily: "Arial"),
-                                    // ignore: prefer_const_constructors
-                                    decoration: InputDecoration(
-                                      counterText: "",
-                                      hintText: "Type...",
-                                      floatingLabelBehavior:
-                                          FloatingLabelBehavior.never,
-                                      contentPadding:
-                                          const EdgeInsets.only(bottom: 0),
-                                      border: InputBorder.none,
-                                    ),
-                                    cursorHeight: 24,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // ignore: prefer_const_constructors
-                            InkWell(
-                              onTap: () {
-                                open_attachment();
-                              },
-                              borderRadius: BorderRadius.circular(5),
-                              splashColor: Colors.brown[50],
-                              child: const Icon(
-                                  color: Color.fromARGB(255, 157, 115, 115),
-                                  Icons.attach_file_outlined),
-                            ),
-                            // ignore: prefer_const_constructors
-                            if (_change != 0)
-                              // ignore: prefer_const_constructors
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 7.0, right: 8),
-                                child: Material(
-                                  elevation: 3,
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(10),
-                                    onTap: () {
-                                      print(text);
-                                    },
-                                    splashColor: Colors.brown[50],
-                                    ////splashFactory: ,
-                                    child: Container(
-                                      height: 35,
-                                      width: 35,
-                                      padding: EdgeInsets.only(left: 5),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 1,
-                                            color: Colors.transparent),
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: Color.fromARGB(212, 134, 60, 60),
-                                      ),
-                                      child: Icon(
-                                          size: 23,
-                                          color: Colors.white,
-                                          Icons.send_rounded),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_end == 1)
-                    InkWell(
-                      onTap: click,
-                      child: const Icon(
-                          color: Color.fromARGB(215, 106, 49, 49),
-                          Icons.camera_alt_rounded),
-                    ),
-                  Icon(
-                      color: const Color.fromARGB(215, 106, 49, 49),
-                      _end == 1
-                          ? Icons.photo_album_rounded
-                          : Icons.emoji_emotions_rounded),
-                  if (_end == 1)
-                    InkWell(
-                      child: GestureDetector(
-                        onLongPressDown: (details) async {
-                          if (await Permission.microphone.status ==
-                              PermissionStatus.granted) {
-                            start_recording();
-                          }
-                          print(details);
-                        },
-                        onLongPressUp: (() {
-                          stop_recording();
-                          print("released");
-                        }),
-                        child: const Icon(
-                            color: Color.fromARGB(215, 106, 49, 49), Icons.mic),
-                      ),
-                    )
-                ],
+      child: Expanded(
+        child: Column(
+          children: [
+            Visibility(
+              visible: attachment,
+              child: ChatAttachment(
+                attachment: open_attachment,
               ),
             ),
-          ),
-          Visibility(
-            visible: emojiOpen,
-            child: EmojiTabOpener(),
-          ),
-          Visibility(
-            maintainState: true,
-            visible: emojiOpen,
-            child: EmojiBar(),
-          ),
-        ],
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 5, left: 5, bottom: 12),
+                child: Row(
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Material(
+                      borderRadius: BorderRadius.circular(20),
+                      elevation: 3,
+                      child: AnimatedContainer(
+                        onEnd: () {
+                          if (_change == 0)
+                            // ignore: curly_braces_in_flow_control_structures
+                            setState(() {
+                              _end *= -1;
+                            });
+                        },
+                        decoration: BoxDecoration(
+                          // ignore: prefer_const_literals_to_create_immutables
+
+                          color: const Color.fromARGB(154, 236, 208, 208),
+                          border: Border.all(
+                            color: Colors.transparent,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: _change == 0
+                            ? MediaQuery.of(context).size.width * 0.7
+                            : MediaQuery.of(context).size.width * 0.9,
+                        constraints: const BoxConstraints(
+                          maxHeight: 100,
+                        ),
+                        // height: 40,
+                        duration: Duration(milliseconds: 100),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: IconButton(
+                                  iconSize: 25,
+                                  splashRadius: 20,
+                                  onPressed: changeEmojiTab,
+                                  color:
+                                      const Color.fromARGB(255, 157, 115, 115),
+                                  icon:
+                                      const Icon(Icons.emoji_emotions_outlined),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  // height: 40,
+                                  //  constraints:
+                                  // BoxConstraint
+                                  // constraints: BoxConstraints(maxHeight: 100),
+                                  //width: 200,
+                                  // ignore: prefer_const_constructors
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 5,
+                                      //left: 5,
+                                    ),
+                                    // ignore: prefer_const_constructors
+                                    child: TextField(
+                                      onTap: keyboard_dismiss,
+
+                                      controller: controller,
+
+                                      // maxLength: 10,
+                                      maxLines: null,
+                                      onChanged: (value) {
+                                        text = value;
+                                        changeHeight(value);
+                                        if (value.isNotEmpty && _change == 0) {
+                                          setState(
+                                            () {
+                                              _end = -1;
+                                              _change = 1;
+                                            },
+                                          );
+                                        } else if (value.isEmpty) {
+                                          setState(
+                                            () {
+                                              _change = 0;
+                                            },
+                                          );
+                                        }
+                                      },
+                                      // maxLines: null,
+                                      minLines: null,
+                                      //expands: true,
+
+                                      style: const TextStyle(
+                                          fontSize: 20, fontFamily: "Arial"),
+                                      // ignore: prefer_const_constructors
+                                      decoration: InputDecoration(
+                                        counterText: "",
+                                        hintText: "Type...",
+                                        floatingLabelBehavior:
+                                            FloatingLabelBehavior.never,
+                                        contentPadding:
+                                            const EdgeInsets.only(bottom: 0),
+                                        border: InputBorder.none,
+                                      ),
+                                      cursorHeight: 24,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // ignore: prefer_const_constructors
+                              InkWell(
+                                onTap: () {
+                                  open_attachment();
+                                },
+                                borderRadius: BorderRadius.circular(5),
+                                splashColor: Colors.brown[50],
+                                child: const Icon(
+                                    color: Color.fromARGB(255, 157, 115, 115),
+                                    Icons.attach_file_outlined),
+                              ),
+                              // ignore: prefer_const_constructors
+                              if (_change != 0)
+                                // ignore: prefer_const_constructors
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 7.0, right: 8),
+                                  child: Material(
+                                    elevation: 3,
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(10),
+                                      onTap: () {
+                                        print(text);
+                                      },
+                                      splashColor: Colors.brown[50],
+                                      ////splashFactory: ,
+                                      child: Container(
+                                        height: 35,
+                                        width: 35,
+                                        padding: EdgeInsets.only(left: 5),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 1,
+                                              color: Colors.transparent),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color:
+                                              Color.fromARGB(212, 134, 60, 60),
+                                        ),
+                                        child: Icon(
+                                            size: 23,
+                                            color: Colors.white,
+                                            Icons.send_rounded),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (_end == 1)
+                      InkWell(
+                        onTap: click,
+                        child: const Icon(
+                            color: Color.fromARGB(215, 106, 49, 49),
+                            Icons.camera_alt_rounded),
+                      ),
+                    _end == 1
+                        ? GestureDetector(
+                            onTap: () {
+                              open_gallery();
+                            },
+                            child: Icon(
+                                color: const Color.fromARGB(215, 106, 49, 49),
+                                Icons.photo_album_rounded),
+                          )
+                        : Icon(
+                            color: const Color.fromARGB(215, 106, 49, 49),
+                            Icons.emoji_emotions_rounded),
+                    if (_end == 1)
+                      InkWell(
+                        child: GestureDetector(
+                          onLongPressDown: (details) async {
+                            if (await Permission.microphone.status ==
+                                PermissionStatus.granted) {
+                              start_recording();
+                            }
+                            print(details);
+                          },
+                          onLongPressUp: (() {
+                            stop_recording();
+                            print("released");
+                          }),
+                          child: const Icon(
+                              color: Color.fromARGB(215, 106, 49, 49),
+                              Icons.mic),
+                        ),
+                      )
+                  ],
+                ),
+              ),
+            ),
+            Visibility(
+              visible: emojiOpen,
+              child: EmojiTabOpener(),
+            ),
+            Visibility(
+              maintainState: true,
+              visible: emojiOpen,
+              child: EmojiBar(),
+            ),
+          ],
+        ),
       ),
     );
   }
