@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pigeons/explore.dart';
+import 'package:pigeons/home.dart';
 import './my_account.dart';
 import 'community.dart';
 
@@ -13,7 +14,7 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  var pages = [Community(), Explore(), Community(), MyAccount()];
+  var pages = [Home(), Explore(), Community(), MyAccount()];
   int flag;
   _NavBarState({required this.flag});
   void press_behaviour(int index) {

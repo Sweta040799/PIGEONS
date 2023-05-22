@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Message extends StatelessWidget {
-  const Message({super.key});
+  Message({super.key, required this.message, required this.name});
+  String message, name;
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class Message extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 5, bottom: 2),
                   child: Text(
-                    "Abhishek Paul",
+                    name,
                     style: TextStyle(
                       fontFamily: 'Arial',
                       fontSize: 18,
@@ -44,7 +47,7 @@ class Message extends StatelessWidget {
                     children: [
                       Container(
                         child: Text(
-                          "Hey whatsupp,how are you doing baby, do you miss me?",
+                          message,
                           style: TextStyle(
                             color: Color.fromARGB(255, 31, 30, 30),
                             fontFamily: 'Roboto',

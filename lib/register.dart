@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pigeons/AuthFuncs/phone_Auth.dart';
 
+import 'explore.dart';
+
 class Register extends StatefulWidget {
   const Register({super.key});
 
@@ -594,7 +596,15 @@ class _RegisterState extends State<Register> {
                           ),
                           Center(
                             child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          Explore(),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(
                                   Icons.send,
                                   color: Colors.indigo,
@@ -923,11 +933,12 @@ class _OtpState extends State<Otp> {
                       if (!currentFocus.hasPrimaryFocus) {
                         currentFocus.unfocus();
                       }
-                      ScaffoldMessenger.of(widget.context)
-                          .showSnackBar(SnackBar(
-                        content: Text("Signed in as ${widget.phoneNo}"),
-                        duration: Duration(seconds: 4),
-                      ));
+                      // ScaffoldMessenger.of(widget.context)
+                      //     .showSnackBar(SnackBar(
+                      //   content: Text("Signed in as ${widget.phoneNo}"),
+                      //   duration: Duration(seconds: 4),
+                      // ));
+                      print("okay");
                       widget.pagecontroller.jumpToPage(1);
                     } else {
                       showDialog(

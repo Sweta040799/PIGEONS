@@ -4,11 +4,11 @@ import 'dart:io';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
+//import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pigeons/chatbox_attachment.dart';
 import 'package:pigeons/emoji_bar.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,7 +16,13 @@ class ChatBar extends StatefulWidget {
   var controller;
   void Function(bool) isEmoji;
   bool emojiOpen = false;
-  ChatBar({super.key, this.controller, required this.isEmoji});
+  void Function(String) send;
+  ChatBar({
+    super.key,
+    this.controller,
+    required this.isEmoji,
+    required this.send,
+  });
 
   // isEmoji=isEmoji;
   @override
@@ -27,11 +33,11 @@ class ChatBar extends StatefulWidget {
   }
 }
 
-FlutterSoundRecorder? flutterSoundRecorder;
-@override
-void initState() {
-  flutterSoundRecorder = FlutterSoundRecorder();
-}
+// FlutterSoundRecorder? flutterSoundRecorder;
+// @override
+// void initState() {
+//   flutterSoundRecorder = FlutterSoundRecorder();
+// }
 
 File? image;
 String _recordFilePath = '';
@@ -53,28 +59,28 @@ class _ChatBarState extends State<ChatBar> {
     });
   }
 
-  Future<void> start_recording() async {
-    Directory docDir = await getApplicationDocumentsDirectory();
+  // Future<void> start_recording() async {
+  //   Directory docDir = await getApplicationDocumentsDirectory();
 
-    String docPath = docDir.path;
-    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    _recordFilePath = '/storage/emulated/0/Download/recording_$timestamp.wav';
-    print(_recordFilePath);
-    await flutterSoundRecorder?.openRecorder();
-    print("object");
-    await flutterSoundRecorder?.startRecorder(
-      codec: Codec.aacADTS,
-      toFile: _recordFilePath,
-    );
-  }
+  //   String docPath = docDir.path;
+  //   String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+  //   _recordFilePath = '/storage/emulated/0/Download/recording_$timestamp.wav';
+  //   print(_recordFilePath);
+  //   await flutterSoundRecorder?.openRecorder();
+  //   print("object");
+  //   await flutterSoundRecorder?.startRecorder(
+  //     codec: Codec.aacADTS,
+  //     toFile: _recordFilePath,
+  //   );
+  // }
 
-  Future stop_recording() async {
-    print("stopped");
-    await flutterSoundRecorder?.stopRecorder().then((value) => print(value));
+  // Future stop_recording() async {
+  //   print("stopped");
+  //   await flutterSoundRecorder?.stopRecorder().then((value) => print(value));
 
-    await flutterSoundRecorder?.closeRecorder();
-    print("");
-  }
+  //   await flutterSoundRecorder?.closeRecorder();
+  //   print("");
+  // }
 
   var controller;
   void Function(bool) isEmoji;
@@ -274,10 +280,13 @@ class _ChatBarState extends State<ChatBar> {
                                           color:
                                               Color.fromARGB(212, 134, 60, 60),
                                         ),
-                                        child: Icon(
-                                            size: 23,
-                                            color: Colors.white,
-                                            Icons.send_rounded),
+                                        child: GestureDetector(
+                                          onTap: () => widget.send(text),
+                                          child: Icon(
+                                              size: 23,
+                                              color: Colors.white,
+                                              Icons.send_rounded),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -312,12 +321,12 @@ class _ChatBarState extends State<ChatBar> {
                           onLongPressDown: (details) async {
                             if (await Permission.microphone.status ==
                                 PermissionStatus.granted) {
-                              start_recording();
+                              // start_recording();
                             }
                             print(details);
                           },
                           onLongPressUp: (() {
-                            stop_recording();
+                            // stop_recording();
                             print("released");
                           }),
                           child: const Icon(

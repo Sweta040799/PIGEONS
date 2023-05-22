@@ -12,13 +12,6 @@ class Recording extends StatelessWidget {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-
-    take_permission();
-  }
-
-  @override
   Widget build(BuildContext context) {
     print("build() recording");
     return Container(

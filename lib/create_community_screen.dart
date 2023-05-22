@@ -5,8 +5,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:pigeons/providers/community_backend.dart';
+import 'package:provider/provider.dart';
 
 class CreateCommunity extends StatefulWidget {
   const CreateCommunity({super.key});
@@ -17,16 +17,19 @@ class CreateCommunity extends StatefulWidget {
 
 class _CreateCommunityState extends State<CreateCommunity> {
   var isTap = false;
-  List<Color> _visibilitycolor = [
+  final List<Color> _visibilitycolor = [
     Color.fromARGB(255, 245, 243, 243),
     Color.fromARGB(255, 245, 243, 243),
     Color.fromARGB(255, 245, 243, 243)
   ];
 
   var _isUnique = false;
+
+  String? visChoice;
+
+  String? communityname;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Timer(Duration(seconds: 3), () => _autoScroll());
   }
@@ -68,6 +71,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
   int page = 0;
   @override
   Widget build(BuildContext context) {
+    var communitydata = Provider.of<CommunityBackend>(context);
     //if (load == false) dropdownValue = dropdownitems[0];
     final app_bar = AppBar(
       backgroundColor: Colors.transparent,
@@ -90,7 +94,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 5),
         child: Row(
-          children: [
+          children: const [
             Icon(
               Icons.arrow_back,
               color: Colors.black,
@@ -270,7 +274,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
                 gradient: LinearGradient(
                     end: Alignment.bottomCenter,
                     begin: Alignment.topCenter,
-                    colors: [
+                    colors: const [
                       Color.fromARGB(214, 229, 175, 154),
                       // Color.fromARGB(255, 219, 158, 136),
                       Colors.white
@@ -311,11 +315,25 @@ class _CreateCommunityState extends State<CreateCommunity> {
                                   borderRadius: BorderRadius.circular(15)),
                               width: MediaQuery.of(context).size.width / 2,
                               child: TextFormField(
+                                autovalidateMode: AutovalidateMode.always,
                                 validator: (value) {
-                                  if (!_isUnique)
+                                  print(value);
+                                  if (value == null) {
+                                    return "Community name cannot be empty";
+                                  }
+                                  communitydata
+                                      .validateCommunity(value)
+                                      .then((val) {
+                                    setState(() {
+                                      _isUnique = val;
+                                      communityname = value;
+                                    });
+                                  });
+                                  if (!_isUnique) {
                                     return "Please enter unique community name";
-                                  else
+                                  } else {
                                     return null;
+                                  }
                                 },
                                 decoration: InputDecoration(
                                   hintText: ' Unique',
@@ -440,6 +458,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    visChoice = "Public";
                                     _visibilitycolor[0] =
                                         Color.fromARGB(179, 225, 143, 111);
                                     _visibilitycolor[1] =
@@ -461,6 +480,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    visChoice = "Invite Only";
                                     _visibilitycolor[1] =
                                         Color.fromARGB(179, 225, 143, 111);
                                     _visibilitycolor[0] =
@@ -482,6 +502,7 @@ class _CreateCommunityState extends State<CreateCommunity> {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
+                                    visChoice = "private";
                                     _visibilitycolor[2] =
                                         Color.fromARGB(179, 225, 143, 111);
                                     _visibilitycolor[1] =
@@ -580,6 +601,16 @@ class _CreateCommunityState extends State<CreateCommunity> {
                             )
                           ],
                         ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              await communitydata.addCommunity(
+                                  communityname!,
+                                  dropdownValue!,
+                                  visChoice!,
+                                  _value.round(),
+                                  on);
+                            },
+                            child: Text("Create")),
                       ],
                     ),
                   ],

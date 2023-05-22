@@ -1,19 +1,27 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
 // check for error when appbar initialised outside build(navv_bar problem)
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+// import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:_flutterfire_internals/_flutterfire_internals.dart';
+import 'package:pigeons/create_community_screen.dart';
+import 'package:pigeons/firebase_options.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' as foundation;
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// import 'package:flutter/foundation.dart' as foundation;
+// import 'package:flutter/src/widgets/container.dart';
+// import 'package:flutter/src/widgets/framework.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pigeons/chat_bar.dart';
 import 'package:pigeons/community_end_drawer.dart';
 import 'package:pigeons/community_side_drawer.dart';
-import 'package:pigeons/end_drawer.dart';
+// import 'package:pigeons/end_drawer.dart';
 import 'package:pigeons/nav_bar.dart';
+import 'package:pigeons/providers/message.dart';
+import 'package:pigeons/providers/user.dart';
+import 'package:provider/provider.dart';
 
-import 'emoji.dart';
+// import 'emoji.dart';
 import 'message.dart';
 
 class Community extends StatefulWidget {
@@ -25,7 +33,12 @@ class Community extends StatefulWidget {
 
 class _CommunityState extends State<Community> {
   int _change = 0;
+  @override
+  var messagelist = [];
 
+  late Future<String> name;
+
+  var streambuilder = null;
   Future<bool> take_permission() async {
     await Permission.microphone.request();
     await Permission.storage.request();
@@ -34,6 +47,14 @@ class _CommunityState extends State<Community> {
     print(permissionStatus);
     if (permissionStatus == permissionStatus.isGranted) return true;
     return false;
+  }
+
+  late Stream<DatabaseEvent> messagedatastream;
+  @override
+  void dispose() {
+    print("disposed");
+    sub.off();
+    super.dispose();
   }
 
   final TextEditingController _controller = TextEditingController();
@@ -51,11 +72,27 @@ class _CommunityState extends State<Community> {
   }
 
   double drag = 0;
-
+  late Messages messagedata;
+  // ignore: prefer_typing_uninitialized_variables
+  var stream;
+  var sub;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("hi");
+
+    messagedata = context.read<Messages>();
+
+    messagedatastream = messagedata.db.child("chat").onChildAdded;
+
+    sub = messagedatastream.listen((event) {
+      setState(() {
+        messagelist.add(event.snapshot.value);
+      });
+    });
+    //sub.off();
+    //sub.cancel();
     take_permission();
   }
 
@@ -100,6 +137,8 @@ class _CommunityState extends State<Community> {
 
   @override
   Widget build(BuildContext context) {
+    //messagedata = Provider.of<Messages>(context);
+    // messagedata.listenText();
     icon_switch = (drag != -60)
         ? IconButton(
             key: ValueKey(1),
@@ -119,6 +158,7 @@ class _CommunityState extends State<Community> {
             children: [
               ChatBar(
                 controller: _controller,
+                send: send_message,
                 isEmoji: backpress,
               ),
             ],
@@ -127,7 +167,7 @@ class _CommunityState extends State<Community> {
             flag: 2,
           );
     double h = MediaQuery.of(context).size.height;
-    final app_bar = AppBar(
+    final appBar = AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
       shadowColor: Colors.transparent,
@@ -169,7 +209,13 @@ class _CommunityState extends State<Community> {
           splashRadius: 15,
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CreateCommunity(),
+                ));
+          },
           icon: Icon(Icons.add),
           color: Colors.black,
           splashRadius: 15,
@@ -198,10 +244,11 @@ class _CommunityState extends State<Community> {
 
       title: Text("Community"),
     );
+    final userdata = Provider.of<Users>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: app_bar,
+        appBar: appBar,
         body: Stack(
           children: [
             CommunityEndDrawer(),
@@ -221,7 +268,37 @@ class _CommunityState extends State<Community> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Message(),
+                      //  FloatingActionButton(onPressed: send_message),
+                      // ignore: avoid_print
+                      Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return messagelist.isNotEmpty
+                                ? messagelist[index]["email"] ==
+                                        FirebaseAuth.instance.currentUser!.email
+                                    ? Row(
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            // color: Colors.blue,
+                                            child: Message(
+                                                message: messagelist[index]
+                                                    ["message"],
+                                                name: messagelist[index]
+                                                    ["name"]),
+                                          ),
+                                        ],
+                                      )
+                                    : Message(
+                                        message: messagelist[index]["message"],
+                                        name: messagelist[index]["email"])
+                                : Container();
+                          },
+                          itemCount: messagelist.length,
+                        ),
+                      ),
+
+                      //Message(message: "text_message", name: "Abhishek"),
                       Container(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -254,5 +331,12 @@ class _CommunityState extends State<Community> {
         ),
       ),
     );
+  }
+
+  Future<void> send_message(String message) async {
+    var email = FirebaseAuth.instance.currentUser!.email;
+    var name = FirebaseAuth.instance.currentUser!.displayName;
+    //messagelist.add(Message(message: message, name: name));
+    await messagedata.addText(message, email!, name!);
   }
 }

@@ -8,10 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pigeons/AuthFuncs/email_signin.dart';
 import 'package:pigeons/explore.dart';
+import 'package:pigeons/providers/user.dart';
 import 'package:pigeons/register.dart';
-import 'my_button.dart';
-import 'my_textfield.dart';
-import 'square_tile.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,6 +18,7 @@ class LoginPage extends StatefulWidget {
   // LoginPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPage createState() => _LoginPage();
 }
 
@@ -31,7 +31,7 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Set the status bar color to white
       statusBarBrightness:
           Brightness.dark, // Set the status bar brightness to dark
@@ -39,88 +39,90 @@ class _LoginPage extends State<LoginPage> {
           Brightness.light, // Set the status bar icon brightness to dark
     ));
     var statusbarheight = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height,
-            child: const Image(
-              fit: BoxFit.cover,
-              image: AssetImage("images/night.png"),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(
-                  child: Transform.rotate(
-                      angle: 180 * 3.1416 / 180,
-                      child: ClipPath(
-                        clipper: MyCustomClipper(),
-                        child: Container(
-                            decoration: BoxDecoration(
-                              //  border: Border.all(),
-                              color: Color.fromARGB(238, 255, 255, 255),
-                            ),
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height / 2.2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [const login()],
-                            )),
-                      )),
-                ),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: Stack(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              child: const Image(
+                fit: BoxFit.cover,
+                image: AssetImage("images/night.png"),
               ),
-            ],
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 100, left: 20),
-            // color: Colors.grey,
-            height: MediaQuery.of(context).size.height / 5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text(
-                  "Get Started with ",
-                  style: TextStyle(
-                      fontFamily: 'Trochut',
-                      fontSize: 50,
-                      color: Colors.white54),
+                BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Container(
+                    child: Transform.rotate(
+                        angle: 180 * 3.1416 / 180,
+                        child: ClipPath(
+                          clipper: MyCustomClipper(),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                //  border: Border.all(),
+                                color: Color.fromARGB(238, 255, 255, 255),
+                              ),
+                              width: double.infinity,
+                              height: MediaQuery.of(context).size.height / 2.2,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [const login()],
+                              )),
+                        )),
+                  ),
                 ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Text(
-                      "Pigeons",
-                      style: TextStyle(
-                          fontFamily: 'Trochut',
-                          fontSize: 50,
-                          color: Color.fromARGB(255, 217, 211, 159)),
-                    ),
-                    Positioned(
-                      right: -30,
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage('images/pigonsicon.png'),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Text("\"Combining Streaming with community!\"",
-                    style: TextStyle(
-                        fontFamily: 'PT Serif',
-                        fontSize: 15,
-                        color: Color.fromARGB(255, 255, 255, 255)))
               ],
             ),
-          )
-        ],
+            Container(
+              margin: const EdgeInsets.only(top: 100, left: 20),
+              // color: Colors.grey,
+              height: MediaQuery.of(context).size.height / 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Get Started with ",
+                    style: TextStyle(
+                        fontFamily: 'Trochut',
+                        fontSize: 50,
+                        color: Colors.white54),
+                  ),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Text(
+                        "Pigeons",
+                        style: TextStyle(
+                            fontFamily: 'Trochut',
+                            fontSize: 50,
+                            color: Color.fromARGB(255, 217, 211, 159)),
+                      ),
+                      Positioned(
+                        right: -30,
+                        child: CircleAvatar(
+                          radius: 15,
+                          backgroundImage: AssetImage('images/pigonsicon.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text("\"Combining Streaming with community!\"",
+                      style: TextStyle(
+                          fontFamily: 'PT Serif',
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 255, 255, 255)))
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -186,6 +188,7 @@ class _loginState extends State<login> {
 
   @override
   Widget build(BuildContext context) {
+    final userdata = Provider.of<Users>(context, listen: false);
     return LayoutBuilder(builder: (context, cns) {
       return Transform.rotate(
         angle: 180 * 3.1416 / 180,
@@ -417,7 +420,7 @@ class _loginState extends State<login> {
                     onTap: () async {
                       print("object");
                       final cred = await signInWithGoogle();
-                      if (cred.user! != null)
+                      if (cred.user! != null) {
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -426,6 +429,34 @@ class _loginState extends State<login> {
                                     "signed in as ${cred.user!.displayName!}"));
                           },
                         );
+                        bool isPresent =
+                            await userdata.checkUser(cred.user!.email!);
+                        if (isPresent == false) {
+                          await userdata.createNewUser(
+                              cred.user!.displayName,
+                              cred.user!.email,
+                              cred.user!.phoneNumber,
+                              cred.user!.photoURL,
+                              false);
+                        }
+
+                        await userdata.fetchUserDetails(cred.user!.email!);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) => const Explore(),
+                          ),
+                        );
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                                title: Text("Some error occured"));
+                          },
+                        );
+                      }
                       print(cred.user!.displayName!);
                     },
                     child: const CircleAvatar(

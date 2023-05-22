@@ -1,12 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:pigeons/providers/user.dart';
+import 'package:provider/provider.dart';
 
 class AccountView extends StatelessWidget {
   const AccountView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userdata = Provider.of<Users>(context);
     var h = MediaQuery.of(context).size.height;
     return ClipRRect(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
@@ -58,7 +61,7 @@ class AccountView extends StatelessWidget {
                       child: Container(
                         //  color: Color.fromARGB(120, 188, 164, 164),
                         child: Text(
-                          "Abhishek Paul",
+                          userdata.name!,
                           style: TextStyle(fontFamily: 'Arial', fontSize: 22),
                         ),
                       ),

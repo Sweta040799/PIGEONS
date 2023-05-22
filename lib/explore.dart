@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:pigeons/nav_bar.dart';
+import 'package:provider/provider.dart';
+
+import 'providers/user.dart';
 
 class Explore extends StatefulWidget {
   const Explore({super.key});
@@ -25,7 +28,8 @@ class _ExploreState extends State<Explore> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(Duration(seconds: 3), () => _autoScroll());
+
+    Timer(const Duration(seconds: 3), () => _autoScroll());
   }
 
   final PageController page_controller = PageController();
@@ -50,26 +54,30 @@ class _ExploreState extends State<Explore> {
         tpage = 0;
       }
       t.animateToPage(tpage,
-          duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+          duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
       page_controller.animateToPage(
         page,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
-      Timer(Duration(seconds: 3), () => _autoScroll());
+      Timer(const Duration(seconds: 3), () => _autoScroll());
     }
     // Schedule the next auto-scroll
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Set the status bar color to white
       statusBarBrightness:
           Brightness.dark, // Set the status bar brightness to dark
       statusBarIconBrightness:
           Brightness.light, // Set the status bar icon brightness to dark
     ));
+    var userData = Provider.of<Users>(
+      context,
+      listen: true,
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -151,31 +159,31 @@ class _ExploreState extends State<Explore> {
                     ),
                     Row(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         CircleAvatar(
                           radius: page == 0 ? 6 : 4,
                           backgroundColor: page == 0
                               ? Colors.indigo
-                              : Color.fromARGB(255, 207, 205, 205),
+                              : const Color.fromARGB(255, 207, 205, 205),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         CircleAvatar(
                           radius: page == 1 ? 6 : 4,
                           backgroundColor: page == 1
                               ? Colors.indigo
-                              : Color.fromARGB(255, 207, 205, 205),
+                              : const Color.fromARGB(255, 207, 205, 205),
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: const Text(
                         "Picks for you!",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -192,25 +200,26 @@ class _ExploreState extends State<Explore> {
                         itemCount: 10,
                         itemBuilder: (context, index) {
                           return Container(
+                            height: 170,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.blue,
                             ),
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 20, top: 20, bottom: 20, right: 20),
                             width: MediaQuery.of(context).size.width / 1.5 - 40,
                             child: index % 2 == 0
                                 ? ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     clipBehavior: Clip.hardEdge,
-                                    child: Image(
+                                    child: const Image(
                                       fit: BoxFit.fill,
                                       image: AssetImage("images/R.jpg"),
                                     ),
                                   )
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image(
+                                    child: const Image(
                                       fit: BoxFit.fill,
                                       image: AssetImage("images/R.jfif"),
                                     ),
@@ -220,8 +229,8 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 20),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, bottom: 20),
+                      child: const Text(
                         "Trending",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -250,7 +259,7 @@ class _ExploreState extends State<Explore> {
                                 height: 190,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image(
+                                    child: const Image(
                                       image:
                                           AssetImage("images/community1.png"),
                                     )),
@@ -268,7 +277,7 @@ class _ExploreState extends State<Explore> {
                                 height: 190,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image(
+                                    child: const Image(
                                       image:
                                           AssetImage("images/community1.png"),
                                     )),
@@ -286,7 +295,7 @@ class _ExploreState extends State<Explore> {
                                 height: 190,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image(
+                                    child: const Image(
                                       image:
                                           AssetImage("images/community1.png"),
                                     )),
@@ -304,7 +313,7 @@ class _ExploreState extends State<Explore> {
                                 height: 190,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image(
+                                    child: const Image(
                                       image:
                                           AssetImage("images/community1.png"),
                                     )),
@@ -315,8 +324,8 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 0),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, bottom: 0),
+                      child: const Text(
                         "Continue Watching",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -337,7 +346,7 @@ class _ExploreState extends State<Explore> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.blue,
                             ),
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 20, top: 20, bottom: 20, right: 20),
                             width: MediaQuery.of(context).size.width / 1.5 - 40,
                             child: Stack(
@@ -347,14 +356,14 @@ class _ExploreState extends State<Explore> {
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         clipBehavior: Clip.hardEdge,
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jpg"),
                                         ),
                                       )
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jfif"),
                                         ),
@@ -362,16 +371,16 @@ class _ExploreState extends State<Explore> {
                                 Positioned(
                                     bottom: 5,
                                     child: Container(
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5),
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 5),
                                       height: 5,
                                       width: MediaQuery.of(context).size.width /
                                               1.5 -
                                           50,
                                       child: LinearProgressIndicator(
                                         value: 0.2 + index / 20,
-                                        color:
-                                            Color.fromARGB(255, 101, 117, 204),
+                                        color: const Color.fromARGB(
+                                            255, 101, 117, 204),
                                         backgroundColor: Colors.white,
                                       ),
                                     ))
@@ -382,8 +391,8 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 0),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, bottom: 0),
+                      child: const Text(
                         "Catch out LIVE!",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -404,7 +413,7 @@ class _ExploreState extends State<Explore> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.blue,
                             ),
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 20, top: 20, bottom: 20, right: 20),
                             width: MediaQuery.of(context).size.width / 1.5 - 40,
                             child: Stack(
@@ -415,14 +424,14 @@ class _ExploreState extends State<Explore> {
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         clipBehavior: Clip.hardEdge,
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jpg"),
                                         ),
                                       )
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jfif"),
                                         ),
@@ -432,7 +441,7 @@ class _ExploreState extends State<Explore> {
                                   right: -5,
                                   child: Chip(
                                     backgroundColor: Colors.red[100],
-                                    label: Icon(
+                                    label: const Icon(
                                       Icons.live_tv,
                                       color: Colors.redAccent,
                                     ),
@@ -445,8 +454,8 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 0),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, bottom: 0),
+                      child: const Text(
                         "Filtered For You!",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -467,7 +476,7 @@ class _ExploreState extends State<Explore> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.blue,
                             ),
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                                 left: 20, top: 20, bottom: 20, right: 20),
                             width: MediaQuery.of(context).size.width / 1.5 - 40,
                             child: Stack(
@@ -477,14 +486,14 @@ class _ExploreState extends State<Explore> {
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         clipBehavior: Clip.hardEdge,
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jpg"),
                                         ),
                                       )
                                     : ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                        child: Image(
+                                        child: const Image(
                                           fit: BoxFit.fill,
                                           image: AssetImage("images/R.jfif"),
                                         ),
@@ -496,8 +505,8 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 20, bottom: 0),
-                      child: Text(
+                      margin: const EdgeInsets.only(left: 20, bottom: 0),
+                      child: const Text(
                         "Must Watch Minis",
                         style: TextStyle(
                             letterSpacing: 2,
@@ -521,11 +530,11 @@ class _ExploreState extends State<Explore> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(),
-                                color: Color.fromARGB(236, 82, 35, 237),
+                                color: const Color.fromARGB(236, 82, 35, 237),
                               ),
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                   left: 20, top: 20, bottom: 20, right: 20),
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               width:
                                   MediaQuery.of(context).size.width / 2.6 - 40,
                               child: Stack(
@@ -536,7 +545,7 @@ class _ExploreState extends State<Explore> {
                                           borderRadius:
                                               BorderRadius.circular(10),
                                           clipBehavior: Clip.hardEdge,
-                                          child: Image(
+                                          child: const Image(
                                             fit: BoxFit.fill,
                                             image: AssetImage("images/R.jpg"),
                                           ),
@@ -544,7 +553,7 @@ class _ExploreState extends State<Explore> {
                                       : ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: Image(
+                                          child: const Image(
                                             fit: BoxFit.fill,
                                             image: AssetImage("images/R.jfif"),
                                           ),
@@ -565,9 +574,9 @@ class _ExploreState extends State<Explore> {
                     decoration:
                         BoxDecoration(borderRadius: BorderRadius.circular(20)),
                     width: MediaQuery.of(context).size.width / 2,
-                    child: const Text(
-                      "Good Morning Abhi ",
-                      style: TextStyle(
+                    child: Text(
+                      "Good Morning ${userData.name}",
+                      style: const TextStyle(
                           letterSpacing: 2,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Trochut',

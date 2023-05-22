@@ -135,7 +135,7 @@ class _CommunityEndDrawer extends State<CommunityEndDrawer> {
                             });
                       },
                       child: Text(
-                        "Abhhishek Paul",
+                        "Abhishek Paul",
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'Arial',
