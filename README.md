@@ -30,6 +30,7 @@ PIGEONS is not just an app; it's a revolution in community-based streaming. Inte
     <td style="padding:10px"><img src="https://github.com/Sweta040799/PIGEONS/assets/74866247/76e16a4e-6fa7-4a51-ab1f-103e6886ef3b" width="300"></td>
   </tr>
 </table>
+
 ### 🚀 Get Started
 
 1. **Clone**: `git clone https://github.com/Sweta040799/PIGEONS.git`
@@ -45,10 +46,6 @@ Join the flock! See our [CONTRIBUTING.md](link-to-contributing.md).
 
 MIT License - [LICENSE.md](link-to-license.md).
 
-### 🙏 Acknowledgments
-
-- [Mention any third-party libraries or other resources]
-- [Thank your contributors or anyone else who helped]
 
 ---
 
