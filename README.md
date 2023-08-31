@@ -20,6 +20,7 @@ PIGEONS is not just an app; it's a revolution in community-based streaming. Inte
 ![WhatsApp Image 2023-08-31 at 17 26 404]()
 
 | ![Screenshot1](https://github.com/Sweta040799/PIGEONS/assets/74866247/d0f5ec56-242d-4680-9c5c-b672bdc4c0d2)
+| ![Screenshot8](https://github.com/Sweta040799/PIGEONS/assets/74866247/5d03f38d-d096-48ac-b096-5d52e2dccb13)
 
 | ![Screenshot2](https://github.com/Sweta040799/PIGEONS/assets/74866247/d447fc94-788b-4dbc-8941-72bb2ee0359c)
 | ![Screenshot3](https://github.com/Sweta040799/PIGEONS/assets/74866247/52f0defc-66fe-4e70-a61e-675990a7d6bc)
